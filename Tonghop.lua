@@ -2,6 +2,8 @@ local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
+local userInputService = game:GetService("UserInputService")
+
 -- Thanh tiêu đề nhỏ
 local miniBar = Instance.new("Frame")
 miniBar.Size = UDim2.new(0, 200, 0, 40)
@@ -14,7 +16,7 @@ local miniTitle = Instance.new("TextLabel")
 miniTitle.Size = UDim2.new(1, -60, 1, 0)
 miniTitle.Position = UDim2.new(0, 10, 0, 0)
 miniTitle.BackgroundTransparency = 1
-miniTitle.Text = "Tong Hop Script"
+miniTitle.Text = "TBoy Roblox"
 miniTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 miniTitle.Font = Enum.Font.SourceSansBold
 miniTitle.TextSize = 18
@@ -51,17 +53,29 @@ menuFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 menuFrame.Visible = false
 menuFrame.Parent = screenGui
 
+-- Thanh kéo menu
+local dragBar = Instance.new("Frame")
+dragBar.Size = UDim2.new(1, 0, 0, 30)
+dragBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+dragBar.Parent = menuFrame
+
 -- Nút "X" trong menu chính
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -35, 0, 5)
+closeButton.Position = UDim2.new(1, -35, 0, 0)
 closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
 closeButton.Text = "X"
 closeButton.Parent = menuFrame
 
 -- Danh sách button và script chạy
 local buttonList = {
-    {name = "Royx Hub", script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/User/RoyxHub/main/script.lua"))()'},
+    {name = "W AZURE", script = 'getgenv().Team = "Marines"
+
+getgenv().FixCrash = false -- Turn it On For Hopping Server, Improve Performance But Silent Aim On Mob And Player
+
+getgenv().FixCrash2 = false -- Turn it On For Hopping Server, Improve Performance But Will Remove Speed Changer
+
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104dabe8e19562e5cc2.lua"))()'},
     {name = "Trâu Roblox", script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/User/TrauRoblox/main/script.lua"))()'},
     {name = "Cụt Tay Hub", script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/User/CutTayHub/main/script.lua"))()'},
     {name = "Xero Hub", script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/User/XeroHub/main/script.lua"))()'},
@@ -99,6 +113,31 @@ for i, data in ipairs(buttonList) do
         button.Text = data.name
     end)
 end
+
+-- Xử lý kéo menu
+local dragging = false
+local dragStart, startPos
+
+dragBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = menuFrame.Position
+    end
+end)
+
+dragBar.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        menuFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+userInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
 
 -- Xử lý mở menu từ thanh tiêu đề nhỏ
 openButton.MouseButton1Click:Connect(function()
